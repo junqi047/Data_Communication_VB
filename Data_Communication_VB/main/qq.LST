@@ -1,0 +1,181 @@
+A51 MACRO ASSEMBLER  QQ                                                                   12/28/2011 22:49:20 PAGE     1
+
+
+MACRO ASSEMBLER A51 V7.07
+OBJECT MODULE PLACED IN qq.OBJ
+ASSEMBLER INVOKED BY: D:\Keil\C51\BIN\A51.EXE qq.asm SET(SMALL) DEBUG EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     ORG 0000H
+0000 020006            2     LJMP START
+0003                   3     ORG 0003H
+0003 0200ED            4     LJMP INT
+0006 758160            5     START:MOV SP,#60H
+0009 D2AF              6     SETB EA
+000B D2A8              7     SETB EX0
+000D 7590FF            8     MOV P1,#0FFH
+0010 75A000            9           MOV P2,#00H
+0013 780A             10           MOV R0,#10
+0015 7900             11           MOV R1,#0
+0017 7400             12                MOV A,#0
+0019 2094FD           13                JB P1.4,$
+001C D2A3             14           SETB P2.3
+001E 209005           15     LOOP1:JB P1.0,JIAN1
+0021 28               16           ADD A,R0
+0022 F9               17           MOV R1,A
+0023 1200C0           18                     LCALL ZCX
+0026 209105           19     JIAN1:JB P1.1 ,JIAN2
+0029 09               20           INC R1
+002A E9               21           MOV A,R1
+002B 1200C0           22                     LCALL ZCX
+002E 209205           23     JIAN2: JB P1.2, JIAN3
+0031 98               24           SUBB A,R0
+0032 F9               25           MOV R1,A
+0033 1200C0           26                     LCALL ZCX
+0036 209305           27     JIAN3: JB p1.3 ,JIAN4
+0039 19               28           DEC R1
+003A E9               29           MOV A,R1
+003B 1200C0           30                     LCALL ZCX
+003E 2095DD           31     JIAN4: JB P1.5 ,LOOP1 
+0041 C2A3             32           CLR P2.3
+0043 D2A4             33           SETB P2.4
+0045 7400             34           MOV A,#0
+0047 209005           35     LOOP2: JB P1.0 ,JIAN5
+004A 28               36           ADD A,R0
+004B FA               37           MOV R2,A
+004C 1200C0           38                     LCALL ZCX
+004F 209105           39     JIAN5: JB P1.1,JIAN6
+0052 0A               40           INC R2
+0053 EA               41           MOV A,R2
+0054 1200C0           42                     LCALL ZCX
+0057 209205           43     JIAN6: JB P1.2, JIAN7
+005A 98               44           SUBB A,R0
+005B FA               45           MOV R2,A
+005C 1200C0           46                     LCALL ZCX
+005F 209305           47     JIAN7: JB P1.3 ,JIAN8
+0062 1A               48           DEC R2
+0063 EA               49           MOV A,R2
+0064 1200C0           50                     LCALL ZCX
+0067 2096DD           51     JIAN8:JB P1.6 ,LOOP2
+006A C2A4             52           CLR P2.4
+006C D2A5             53           SETB P2.5
+006E D2A7             54           SETB P2.7
+0070 1200AE           55           LCALL DELAY
+0073 C2A7             56           CLR P2.7
+0075                  57     LOOP3:
+0075 E9               58           MOV A,R1 
+A51 MACRO ASSEMBLER  QQ                                                                   12/28/2011 22:49:20 PAGE     2
+
+0076 75F00A           59             MOV B,#10 
+0079 84               60     DIV AB
+007A C5F0             61         xch a,b
+007C 759800           62     mov scon,#0
+007F C2AC             63     clr es
+0081 9000E3           64     mov dptr,#table
+0084 93               65     movc a,@a+dptr
+0085 C299             66     clr ti
+0087 F599             67     mov sbuf,a
+0089 1200BB           68     lcall delay1
+008C E5F0             69     mov a,b
+008E 93               70     movc a,@a+dptr
+008F C299             71     clr ti
+0091 F599             72     mov sbuf,a
+0093 1200AE           73     lcall delay
+0096 2097FD           74     JB P1.7,$     
+0099 EA               75     MOV A,R2 
+009A 99               76     SUBB A,R1
+009B B40007           77     CJNE A,#0,LOOP4
+009E D2A7             78     SETB P2.7
+00A0 1200AE           79     LCALL DELAY
+00A3 C2A7             80      CLR P2.7
+00A5 09               81     LOOP4:INC R1
+00A6 B93DCC           82          CJNE R1,#61,LOOP3
+00A9 7900             83          MOV R1,#0
+00AB 020075           84          LJMP LOOP3
+00AE 7D0A             85     DELAY:MOV R5,#10
+00B0 7EC8             86        D1:MOV R6,#200
+00B2 7FFA             87        D2:MOV R7,#250
+00B4 DFFE             88        D3:DJNZ R7,D3
+00B6 DEFA             89           DJNZ R6,D2
+00B8 DDF6             90           DJNZ R5,D1
+00BA 22               91           RET
+00BB 7B01             92     DELAY1:MOV R3,#1
+00BD DBFE             93       JIAN10:DJNZ R3,JIAN10
+00BF 22               94          RET
+00C0 FC               95     ZCX: MOV R4,A
+00C1 75F00A           96                     MOV B,#10  
+00C4 84               97          DIV AB
+00C5 C5F0             98          xch a,b
+00C7 759800           99     mov scon,#0
+00CA C2AC            100     clr es
+00CC 9000E3          101     mov dptr,#table
+00CF 93              102     movc a,@a+dptr
+00D0 C299            103     clr ti
+00D2 F599            104     mov sbuf,a
+00D4 1200BB          105     lcall delay1
+00D7 E5F0            106     mov a,b
+00D9 93              107     movc a,@a+dptr
+00DA C299            108     clr ti
+00DC F599            109     mov sbuf,a
+00DE 1200AE          110     lcall delay
+00E1 EC              111          MOV A,R4
+00E2 22              112               RET
+00E3 FC60DAF2        113     TABLE:DB 0FCH,60H,0DAH,0F2H,66H,0B6H,0BEH,0E0H,0FEH,0F6H
+00E7 66B6BEE0                
+00EB FEF6                    
+                     114     
+00ED C0E0            115     INT:PUSH ACC
+00EF 30B4FD          116     JNB P3.4,$
+00F2 20B4FD          117     JB P3.4,$
+00F5 D0E0            118     POP ACC
+00F7 32              119     RETI
+                     120     end
+A51 MACRO ASSEMBLER  QQ                                                                   12/28/2011 22:49:20 PAGE     3
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+ACC. . . . . . . .  D ADDR   00E0H   A   
+B. . . . . . . . .  D ADDR   00F0H   A   
+D1 . . . . . . . .  C ADDR   00B0H   A   
+D2 . . . . . . . .  C ADDR   00B2H   A   
+D3 . . . . . . . .  C ADDR   00B4H   A   
+DELAY. . . . . . .  C ADDR   00AEH   A   
+DELAY1 . . . . . .  C ADDR   00BBH   A   
+EA . . . . . . . .  B ADDR   00A8H.7 A   
+ES . . . . . . . .  B ADDR   00A8H.4 A   
+EX0. . . . . . . .  B ADDR   00A8H.0 A   
+INT. . . . . . . .  C ADDR   00EDH   A   
+JIAN1. . . . . . .  C ADDR   0026H   A   
+JIAN10 . . . . . .  C ADDR   00BDH   A   
+JIAN2. . . . . . .  C ADDR   002EH   A   
+JIAN3. . . . . . .  C ADDR   0036H   A   
+JIAN4. . . . . . .  C ADDR   003EH   A   
+JIAN5. . . . . . .  C ADDR   004FH   A   
+JIAN6. . . . . . .  C ADDR   0057H   A   
+JIAN7. . . . . . .  C ADDR   005FH   A   
+JIAN8. . . . . . .  C ADDR   0067H   A   
+LOOP1. . . . . . .  C ADDR   001EH   A   
+LOOP2. . . . . . .  C ADDR   0047H   A   
+LOOP3. . . . . . .  C ADDR   0075H   A   
+LOOP4. . . . . . .  C ADDR   00A5H   A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+P3 . . . . . . . .  D ADDR   00B0H   A   
+SBUF . . . . . . .  D ADDR   0099H   A   
+SCON . . . . . . .  D ADDR   0098H   A   
+SP . . . . . . . .  D ADDR   0081H   A   
+START. . . . . . .  C ADDR   0006H   A   
+TABLE. . . . . . .  C ADDR   00E3H   A   
+TI . . . . . . . .  B ADDR   0098H.1 A   
+ZCX. . . . . . . .  C ADDR   00C0H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)
